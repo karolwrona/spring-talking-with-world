@@ -23,4 +23,12 @@ public class CalcController {
     public ResponseEntity getMul(@RequestParam("liczby") int[] liczby) {
         return ResponseEntity.ok(Arrays.stream(liczby).reduce(1,(x,y)->x*y));
     }
+    @GetMapping("/roznica")
+    public ResponseEntity getDiv(@RequestParam("liczby") int[] liczby) {
+        return ResponseEntity.ok(Arrays.stream(liczby).reduce((x,y)->x-y));
+    }
+    @GetMapping("/dzielenie")
+    public ResponseEntity getDif(@RequestParam("liczby") int[] liczby) {
+        return ResponseEntity.ok(Arrays.stream(liczby).filter(y -> y !=0).reduce((x,y)->x/y));
+    }
 }
