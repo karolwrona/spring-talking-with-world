@@ -29,8 +29,8 @@ public class UserController {
     @PostMapping("/zapisz/{imie}/{nazwisko}")
     public ResponseEntity post(@PathVariable String imie, @PathVariable String nazwisko) {
         lista.add(imie+" "+nazwisko);
-        ResponseEntity entity = new ResponseEntity("Zapisano: "+imie+" "+nazwisko, HttpStatus.OK);
-        return entity;
+        ResponseEntity entity1 = new ResponseEntity("Zapisano: "+imie+" "+nazwisko, HttpStatus.OK);
+        return entity1;
     }
 }
 
