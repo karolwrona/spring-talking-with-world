@@ -1,7 +1,6 @@
 package pl.edu.wszib.springtalkingwithworld.configuration.model;
 
-public class Osoba {
-    public String id;
+public class OsobaDTO {
     public String imie;
     public int wiek;
 }
