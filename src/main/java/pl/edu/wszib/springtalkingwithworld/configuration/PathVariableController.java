@@ -14,7 +14,7 @@ import java.util.Calendar;
 @RequestMapping("/data")
 public class PathVariableController {
     @GetMapping("/{rok}/{miesiac}/{dzien}")
-    public ResponseEntity post(@PathVariable(required = true) int rok,@PathVariable(required = false) int miesiac, @PathVariable(required = false) int dzien) {
+    public ResponseEntity get(@PathVariable(required = true) int rok,@PathVariable(required = false) int miesiac, @PathVariable(required = false) int dzien) {
         Calendar calendar =Calendar.getInstance();
         calendar.set(rok, miesiac, dzien);
         ResponseEntity entity = new ResponseEntity(calendar.getTimeInMillis(), HttpStatus.OK);
