@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.edu.wszib.springtalkingwithworld.configuration.Uzytkownicy.User;
 import pl.edu.wszib.springtalkingwithworld.configuration.Uzytkownicy.UserCheck;
 
@@ -23,7 +20,8 @@ import java.util.Map;
 public class UsersController extends HttpServlet {
    private Map<String, User> mapaUserow = new HashMap<>();
    @PostMapping("/zarejestruj")
-    public ResponseEntity<String> SingUp(@RequestBody UserCheck userCheck) {
+    public ResponseEntity<String> SingUp(@RequestHeader String login,@RequestHeader String haslo,@RequestHeader String haslo1) {
+      UserCheck userCheck = new UserCheck(login, haslo, haslo1);
       if(mapaUserow.containsKey(userCheck.getLogin())){
          return ResponseEntity.ok("Login "+userCheck.getLogin()+" jest juz zajęty");
       } else if(userCheck.getHaslo().equals(userCheck.getHaslo1())) {
@@ -38,7 +36,10 @@ public class UsersController extends HttpServlet {
    }
 
    @PostMapping("/login")
-   public ResponseEntity<String> Login(@RequestBody User user, HttpServletRequest request) {
+   public ResponseEntity<String> Login(@RequestHeader String login,@RequestHeader String haslo, HttpServletRequest request) {
+      User user = new User();
+      user.setLogin(login);
+      user.setHaslo(haslo);
       if(mapaUserow.get(user.getLogin()).getLogin().equals(user.getLogin())&&
          mapaUserow.get(user.getLogin()).getHaslo().equals(user.getHaslo())){
          HttpSession sesja = request.getSession();
@@ -49,8 +50,8 @@ public class UsersController extends HttpServlet {
       }
    }
 
-   @PostMapping("/logout")
-   public ResponseEntity Logout(@RequestBody String klucz, HttpServletRequest request) {
+   @GetMapping("/logout")
+   public ResponseEntity Logout(@RequestHeader String klucz, HttpServletRequest request) {
       HttpSession sesja = request.getSession();
       if(klucz.equals(sesja.getId())) {
          sesja.invalidate();
