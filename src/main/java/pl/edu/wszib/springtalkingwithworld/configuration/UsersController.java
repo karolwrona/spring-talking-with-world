@@ -1,5 +1,6 @@
 package pl.edu.wszib.springtalkingwithworld.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class UsersController extends HttpServlet {
    private Map<String, User> mapaUserow = new HashMap<>();
    @PostMapping("/zarejestruj")
-    public ResponseEntity<String> SingIn(@RequestBody UserCheck userCheck) {
+    public ResponseEntity<String> SingUp(@RequestBody UserCheck userCheck) {
       if(mapaUserow.containsKey(userCheck.getLogin())){
          return ResponseEntity.ok("Login "+userCheck.getLogin()+" jest juz zajęty");
       } else if(userCheck.getHaslo().equals(userCheck.getHaslo1())) {
@@ -38,7 +39,8 @@ public class UsersController extends HttpServlet {
 
    @PostMapping("/login")
    public ResponseEntity<String> Login(@RequestBody User user, HttpServletRequest request) {
-      if(mapaUserow.get(user.getLogin()).getHaslo().equals(user.getHaslo())) {
+      if(mapaUserow.get(user.getLogin()).getLogin().equals(user.getLogin())&&
+         mapaUserow.get(user.getLogin()).getHaslo().equals(user.getHaslo())){
          HttpSession sesja = request.getSession();
          return ResponseEntity.ok(sesja.getId());
       } else {
@@ -47,11 +49,11 @@ public class UsersController extends HttpServlet {
       }
    }
 
-   @GetMapping("/logout")
-   public ResponseEntity Logout(@RequestParam("klucz") String klucz, HttpServletRequest request) throws ServletException {
+   @PostMapping("/logout")
+   public ResponseEntity Logout(@RequestBody String klucz, HttpServletRequest request) {
       HttpSession sesja = request.getSession();
       if(klucz.equals(sesja.getId())) {
-         request.logout();
+         sesja.invalidate();
          return ResponseEntity.ok().build();
       } else {
          ResponseEntity entity = new ResponseEntity(HttpStatus.UNAUTHORIZED);
